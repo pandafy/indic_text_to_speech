@@ -1,7 +1,7 @@
 import logging
 
 from chandas import syllabize
-from pydub import AudioSegment
+from pydub import AudioSegment, effects
 
 
 class SpeechGenerator(object):
@@ -22,5 +22,5 @@ class SpeechGenerator(object):
         self.library.expand_to_cover(syllables=all_syllables)
         sounds = [self.get_audio_for_sentence(sentence) + AudioSegment.silent(duration=self.unit_silence_length_ms) for sentence in sentences]
         combined_sound = sum(sounds)
-        combined_sound.export(output_path, format=output_format)
-
+        sped = effects.speedup(combined_sound, playback_speed=1.5)
+        sped.export(output_path, format=output_format)
